@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>📚 Словарь программирования</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <!-- Заголовок -->
+        <header class="header">
+            <h1>📚 Словарь программирования</h1>
+        </header>
+
+        <!-- Прогресс -->
+        <div class="progress-container">
+            <div class="progress-bar">
+                <div class="progress-fill" style="width: {{ progress_percentage }}%"></div>
+            </div>
+            <div class="progress-text">
+                Изучено: {{ progress_learned }}/{{ progress_total }} ({{ "%.1f"|format(progress_percentage) }}%)
+            </div>
+        </div>
+
+        <!-- Панель управления -->
+        <div class="control-panel">
+            <div class="filter-group">
+                <label for="category">Категория:</label>
+                <select id="category">
+                    <option value="Все">Все</option>
+                    {% for category in categories %}
+                    <option value="{{ category }}">{{ category }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="search-group">
+                <label for="search">Поиск:</label>
+                <input type="text" id="search" placeholder="Введите термин...">
+            </div>
+        </div>
+
+        <!-- Кнопка режима обучения -->
+        <div class="learning-btn-container">
+            <button class="learning-btn" onclick="startLearningMode()">
+                📖 Режим обучения
+            </button>
+        </div>
+
+        <!-- Список терминов -->
+        <div class="terms-container" id="termsContainer">
+            {% for term in terms %}
+            <div class="term-card">
+                <div class="term-header">
+                    <span class="term-name">🔹 {{ term.term }}</span>
+                    <button class="learn-btn" onclick="markAsLearned('{{ term.term }}')">
+                        ✅ Изучено
+                    </button>
+                </div>
+                <div class="term-translation">Перевод: {{ term.translation }}</div>
+                <div class="term-meta">
+                    Категория: {{ term.category }} | Уровень: {{ term.level }}
+                </div>
+                <div class="term-definition">Определение: {{ term.definition }}</div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <script>
+        // Фильтрация терминов
+        function filterTerms() {
+            const category = document.getElementById('category').value;
+            const search = document.getElementById('search').value;
+            
+            fetch(`/filter?category=${encodeURIComponent(category)}&search=${encodeURIComponent(search)}`)
+                .then(response => response.json())
+                .then(data => {
+                    const container = document.getElementById('termsContainer');
+                    container.innerHTML = '';
+                    
+                    if (data.terms.length === 0) {
+                        container.innerHTML = '<div class="no-results">Термины не найдены</div>';
+                        return;
+                    }
+                    
+                    data.terms.forEach(term => {
+                        const termCard = document.createElement('div');
+                        termCard.className = 'term-card';
+                        termCard.innerHTML = `
+                            <div class="term-header">
+                                <span class="term-name">🔹 ${term.term}</span>
+                                <button class="learn-btn" onclick="markAsLearned('${term.term}')">
+                                    ✅ Изучено
+                                </button>
+                            </div>
+                            <div class="term-translation">Перевод: ${term.translation}</div>
+                            <div class="term-meta">
+                                Категория: ${term.category} | Уровень: ${term.level}
+                            </div>
+                            <div class="term-definition">Определение: ${term.definition}</div>
+                        `;
+                        container.appendChild(termCard);
+                    });
+                });
+        }
+
+        // Отметить как изученный
+        function markAsLearned(term) {
+            fetch('/mark_learned', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ term: term })
+            })
+            .then(response => response.json())
+            .then(data => {
+                document.querySelector('.progress-text').textContent = 
+                    `Изучено: ${data.progress_learned}/${data.progress_total} (${data.progress_percentage}%)`;
+                document.querySelector('.progress-fill').style.width = `${data.progress_percentage}%`;
+            });
+        }
+
+        // Запуск режима обучения
+        function startLearningMode() {
+            const category = document.getElementById('category').value;
+            const search = document.getElementById('search').value;
+            window.location.href = `/learning?category=${encodeURIComponent(category)}&search=${encodeURIComponent(search)}`;
+        }
+
+        // События
+        document.getElementById('category').addEventListener('change', filterTerms);
+        document.getElementById('search').addEventListener('input', filterTerms);
+    </script>
+</body>
+</html>

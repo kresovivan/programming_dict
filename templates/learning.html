@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>📖 Режим обучения</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <!-- Заголовок -->
+        <header class="header">
+            <h1>📖 Режим обучения</h1>
+        </header>
+
+        <!-- Прогресс карточек -->
+        <div class="card-progress" id="cardProgress">
+            1/{{ terms|length }}
+        </div>
+
+        <!-- Карточка -->
+        <div class="learning-card" id="learningCard">
+            <div class="card-term" id="cardTerm">
+                {{ terms[0].term if terms else 'Нет терминов' }}
+            </div>
+            
+            <div class="card-answer" id="cardAnswer" style="display: none;">
+                <div class="card-translation" id="cardTranslation">
+                    Перевод: {{ terms[0].translation if terms else '' }}
+                </div>
+                <div class="card-definition" id="cardDefinition">
+                    Определение: {{ terms[0].definition if terms else '' }}
+                </div>
+            </div>
+        </div>
+
+        <!-- Кнопки управления -->
+        <div class="card-controls">
+            <button class="card-btn prev-btn" onclick="previousCard()" id="prevBtn">
+                ⬅️ Назад
+            </button>
+            
+            <button class="card-btn show-btn" onclick="toggleAnswer()" id="showBtn">
+                🔍 Показать ответ
+            </button>
+            
+            <button class="card-btn next-btn" onclick="nextCard()" id="nextBtn">
+                Вперед ➡️
+            </button>
+        </div>
+
+        <!-- Кнопка выхода -->
+        <div class="exit-container">
+            <button class="exit-btn" onclick="goBack()">
+                ↩️ Назад к словарю
+            </button>
+        </div>
+    </div>
+
+    <script>
+        let currentIndex = 0;
+        let showAnswer = false;
+        const terms = {{ terms|tojson }};
+
+        function updateCard() {
+            if (terms.length === 0) return;
+            
+            const term = terms[currentIndex];
+            document.getElementById('cardTerm').textContent = term.term;
+            document.getElementById('cardTranslation').textContent = `Перевод: ${term.translation}`;
+            document.getElementById('cardDefinition').textContent = `Определение: ${term.definition}`;
+            document.getElementById('cardProgress').textContent = `${currentIndex + 1}/${terms.length}`;
+            
+            // Скрыть ответ
+            document.getElementById('cardAnswer').style.display = 'none';
+            document.getElementById('showBtn').textContent = '🔍 Показать ответ';
+            showAnswer = false;
+        }
+
+        function toggleAnswer() {
+            showAnswer = !showAnswer;
+            const answerElement = document.getElementById('cardAnswer');
+            const showBtn = document.getElementById('showBtn');
+            
+            if (showAnswer) {
+                answerElement.style.display = 'block';
+                showBtn.textContent = '🙈 Скрыть ответ';
+            } else {
+                answerElement.style.display = 'none';
+                showBtn.textContent = '🔍 Показать ответ';
+            }
+        }
+
+        function nextCard() {
+            if (terms.length === 0) return;
+            currentIndex = (currentIndex + 1) % terms.length;
+            updateCard();
+        }
+
+        function previousCard() {
+            if (terms.length === 0) return;
+            currentIndex = (currentIndex - 1 + terms.length) % terms.length;
+            updateCard();
+        }
+
+        function goBack() {
+            window.history.back();
+        }
+
+        // Горячие клавиши
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'ArrowRight') nextCard();
+            if (event.key === 'ArrowLeft') previousCard();
+            if (event.key === ' ') {
+                event.preventDefault();
+                toggleAnswer();
+            }
+        });
+
+        // Инициализация
+        updateCard();
+    </script>
+</body>
+</html>
