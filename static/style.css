@@ -22,7 +22,7 @@ body {
 
 /* Заголовок */
 .header {
-    background: linear-gradient(135deg, #2c3e50, #3498db);
+    background: linear-gradient(135deg, #27ae60, #2ecc71);
     color: white;
     padding: 20px;
     text-align: center;
@@ -63,11 +63,14 @@ body {
 }
 
 /* Панель управления */
+
 .control-panel {
     padding: 15px;
     background: white;
     border-bottom: 1px solid #e9ecef;
 }
+
+
 
 .filter-group, .search-group {
     margin-bottom: 10px;
@@ -84,14 +87,22 @@ select, input {
     width: 100%;
     padding: 10px;
     border: 2px solid #bdc3c7;
-    border-radius: 8px;
+    border-radius: 10px;
     font-size: 14px;
+    outline: none;
 }
 
 select:focus, input:focus {
     outline: none;
     border-color: #3498db;
 }
+
+
+
+select:active {
+    outline: none;
+}
+
 
 /* Кнопки */
 .learning-btn-container {
@@ -310,3 +321,21 @@ select:focus, input:focus {
 .terms-container::-webkit-scrollbar-thumb:hover {
     background: #95a5a6;
 }
+
+
+/* Красивое сообщение "Термины не найдены" */
+.no-results {
+    display: none;
+    text-align: center;
+    padding: 60px 32px;
+    margin: 20px;
+    background: linear-gradient(135deg, rgba(255,255,255,0.95) 0%, rgba(255,255,255,0.9) 100%);
+    border-radius: var(--border-radius-xl);
+    border: 2px dashed var(--primary-300);
+    box-shadow: var(--shadow-lg);
+    backdrop-filter: blur(10px);
+    position: relative;
+    overflow: hidden;
+    animation: fadeInUp 0.6s ease-out;
+}
+

@@ -2,24 +2,25 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>📚 Словарь программирования</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Словарь для начинающих программистов</title>
+    <link rel="icon" type="image/png" href="/static/favicon.png">
+    <link rel="stylesheet" href="/static/style.css">
 </head>
 <body>
     <div class="container">
-        <!-- Заголовок -->
         <header class="header">
-            <h1>📚 Словарь программирования</h1>
+            <h1>
+                <img src="/static/favicon.png"
+                     alt="Словарь для начинающих программистов" width="32" height="32" class="header-icon">
+                Словарь для начинающих программистов
+            </h1>
         </header>
 
-        <!-- Прогресс -->
-        <div class="progress-container">
-            <div class="progress-bar">
-                <div class="progress-fill" style="width: {{ progress_percentage }}%"></div>
-            </div>
-            <div class="progress-text">
-                Изучено: {{ progress_learned }}/{{ progress_total }} ({{ "%.1f"|format(progress_percentage) }}%)
+        <!-- Блок статистики -->
+        <div class="stats-container">
+            <div class="total-terms">
+                📊 Всего загружено терминов: <strong>{{ progress_total }}</strong>
             </div>
         </div>
 
@@ -27,7 +28,7 @@
         <div class="control-panel">
             <div class="filter-group">
                 <label for="category">Категория:</label>
-                <select id="category">
+                <select id="category" class="form-control">
                     <option value="Все">Все</option>
                     {% for category in categories %}
                     <option value="{{ category }}">{{ category }}</option>
@@ -37,7 +38,7 @@
 
             <div class="search-group">
                 <label for="search">Поиск:</label>
-                <input type="text" id="search" placeholder="Введите термин...">
+                <input type="text" id="search" placeholder="Введите термин..." class="form-control">
             </div>
         </div>
 
@@ -54,9 +55,6 @@
             <div class="term-card">
                 <div class="term-header">
                     <span class="term-name">🔹 {{ term.term }}</span>
-                    <button class="learn-btn" onclick="markAsLearned('{{ term.term }}')">
-                        ✅ Изучено
-                    </button>
                 </div>
                 <div class="term-translation">Перевод: {{ term.translation }}</div>
                 <div class="term-meta">
@@ -66,6 +64,11 @@
             </div>
             {% endfor %}
         </div>
+        
+        <!-- Сообщение о пустом результате -->
+        <div class="no-results" id="noResults" style="display: none;">
+            Термины не найдены
+        </div>
     </div>
 
     <script>
@@ -73,27 +76,29 @@
         function filterTerms() {
             const category = document.getElementById('category').value;
             const search = document.getElementById('search').value;
-            
+            const noResults = document.getElementById('noResults');
+
             fetch(`/filter?category=${encodeURIComponent(category)}&search=${encodeURIComponent(search)}`)
                 .then(response => response.json())
                 .then(data => {
                     const container = document.getElementById('termsContainer');
                     container.innerHTML = '';
-                    
+
                     if (data.terms.length === 0) {
-                        container.innerHTML = '<div class="no-results">Термины не найдены</div>';
+                        noResults.style.display = 'block';
+                        container.style.display = 'none';
                         return;
                     }
-                    
+
+                    noResults.style.display = 'none';
+                    container.style.display = 'block';
+
                     data.terms.forEach(term => {
                         const termCard = document.createElement('div');
                         termCard.className = 'term-card';
                         termCard.innerHTML = `
                             <div class="term-header">
                                 <span class="term-name">🔹 ${term.term}</span>
-                                <button class="learn-btn" onclick="markAsLearned('${term.term}')">
-                                    ✅ Изучено
-                                </button>
                             </div>
                             <div class="term-translation">Перевод: ${term.translation}</div>
                             <div class="term-meta">
@@ -103,24 +108,10 @@
                         `;
                         container.appendChild(termCard);
                     });
+                })
+                .catch(error => {
+                    console.error('Ошибка фильтрации:', error);
                 });
-        }
-
-        // Отметить как изученный
-        function markAsLearned(term) {
-            fetch('/mark_learned', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ term: term })
-            })
-            .then(response => response.json())
-            .then(data => {
-                document.querySelector('.progress-text').textContent = 
-                    `Изучено: ${data.progress_learned}/${data.progress_total} (${data.progress_percentage}%)`;
-                document.querySelector('.progress-fill').style.width = `${data.progress_percentage}%`;
-            });
         }
 
         // Запуск режима обучения
@@ -130,9 +121,23 @@
             window.location.href = `/learning?category=${encodeURIComponent(category)}&search=${encodeURIComponent(search)}`;
         }
 
+        // Оптимизация событий с debounce для поиска
+        let searchTimeout;
+        function handleSearch() {
+            clearTimeout(searchTimeout);
+            searchTimeout = setTimeout(filterTerms, 300);
+        }
+
         // События
         document.getElementById('category').addEventListener('change', filterTerms);
-        document.getElementById('search').addEventListener('input', filterTerms);
+        document.getElementById('search').addEventListener('input', handleSearch);
+        
+        // Обработка клавиши Enter в поиске
+        document.getElementById('search').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                filterTerms();
+            }
+        });
     </script>
 </body>
 </html>
