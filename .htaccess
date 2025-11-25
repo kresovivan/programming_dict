@@ -1,0 +1,6 @@
+RewriteEngine On
+
+# Перенаправление всех запросов на Flask приложение
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^(.*)$ /app.py/$1 [L]
