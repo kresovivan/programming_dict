@@ -51,9 +51,13 @@
 
         <!-- Кнопка выхода -->
         <div class="exit-container">
-            <button class="exit-btn" onclick="goBack()">
-                ↩️ Назад к словарю
-            </button>
+            <!-- Кнопка для возврата на главную страницу с сохранением фильтров -->
+            <a href="/{% if request.args %}?{% endif %}{% if request.args.get('category') %}category={{ request.args.get('category') }}&{% endif %}{% if request.args.get('alphabet') %}alphabet={{ request.args.get('alphabet') }}&{% endif %}{% if request.args.get('search') %}search={{ request.args.get('search') }}{% endif %}" 
+               class="exit-btn-link">
+                <button class="exit-btn">
+                    ↩️ Назад к словарю
+                </button>
+            </a>
         </div>
     </div>
 
@@ -103,10 +107,6 @@
             updateCard();
         }
 
-        function goBack() {
-            window.history.back();
-        }
-
         // Горячие клавиши
         document.addEventListener('keydown', function(event) {
             if (event.key === 'ArrowRight') nextCard();
@@ -114,6 +114,11 @@
             if (event.key === ' ') {
                 event.preventDefault();
                 toggleAnswer();
+            }
+            if (event.key === 'Escape') {
+                // При нажатии ESC возвращаемся на главную страницу
+                const returnUrl = "/{% if request.args %}?{% endif %}{% if request.args.get('category') %}category={{ request.args.get('category') }}&{% endif %}{% if request.args.get('alphabet') %}alphabet={{ request.args.get('alphabet') }}&{% endif %}{% if request.args.get('search') %}search={{ request.args.get('search') }}{% endif %}";
+                window.location.href = returnUrl;
             }
         });
 

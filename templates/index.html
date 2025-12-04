@@ -24,120 +24,77 @@
             </div>
         </div>
 
-        <!-- Панель управления -->
-        <div class="control-panel">
+        <!-- Панель управления - теперь это форма -->
+        <form method="GET" action="/" class="control-panel">
             <div class="filter-group">
                 <label for="category">Категория:</label>
-                <select id="category" class="form-control">
-                    <option value="Все">Все</option>
+                <select id="category" name="category" class="form-control">
+                    <option value="Все" {% if selected_category == 'Все' %}selected{% endif %}>Все</option>
                     {% for category in categories %}
-                    <option value="{{ category }}">{{ category }}</option>
+                    <option value="{{ category }}" {% if selected_category == category %}selected{% endif %}>{{ category }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="filter-group">
+                <label for="alphabet">Алфавит:</label>
+                <select id="alphabet" name="alphabet" class="form-control">
+                    <option value="Все" {% if selected_alphabet == 'Все' %}selected{% endif %}>Все</option>
+                    {% for letter in alphabet_letters %}
+                    <option value="{{ letter }}" {% if selected_alphabet == letter %}selected{% endif %}>{{ letter }}</option>
                     {% endfor %}
                 </select>
             </div>
 
             <div class="search-group">
                 <label for="search">Поиск:</label>
-                <input type="text" id="search" placeholder="Введите термин..." class="form-control">
+                <input type="text" id="search" name="search" placeholder="Введите термин..." 
+                       class="form-control" value="{{ search_query }}">
             </div>
-        </div>
+
+            <div class="form-buttons">
+                <button type="submit" class="filter-btn">🔍 Применить фильтры</button>
+                <button type="button" onclick="window.location.href='/'" class="clear-btn">🗑️ Очистить</button>
+            </div>
+        </form>
 
         <!-- Кнопка режима обучения -->
         <div class="learning-btn-container">
-            <button class="learning-btn" onclick="startLearningMode()">
-                📖 Режим обучения
-            </button>
+            <form method="GET" action="/learning">
+                <input type="hidden" name="category" value="{{ selected_category }}">
+                <input type="hidden" name="alphabet" value="{{ selected_alphabet }}">
+                <input type="hidden" name="search" value="{{ search_query }}">
+                <button type="submit" class="learning-btn">
+                    📖 Режим обучения
+                </button>
+            </form>
         </div>
 
         <!-- Список терминов -->
         <div class="terms-container" id="termsContainer">
-            {% for term in terms %}
-            <div class="term-card">
-                <div class="term-header">
-                    <span class="term-name">🔹 {{ term.term }}</span>
+            {% if terms %}
+                {% for term in terms %}
+                <div class="term-card">
+                    <div class="term-header">
+                        <span class="term-name">🔹 {{ term.term }}</span>
+                        {% if term.alphabet %}
+                        <span class="term-alphabet">[{{ term.alphabet }}]</span>
+                        {% endif %}
+                    </div>
+                    <div class="term-translation">Перевод: {{ term.translation }}</div>
+                    <div class="term-meta">
+                        Категория: {{ term.category }} | Уровень: {{ term.level }}
+                    </div>
+                    <div class="term-definition">Определение: {{ term.definition }}</div>
                 </div>
-                <div class="term-translation">Перевод: {{ term.translation }}</div>
-                <div class="term-meta">
-                    Категория: {{ term.category }} | Уровень: {{ term.level }}
+                {% endfor %}
+            {% else %}
+                <!-- Сообщение о пустом результате -->
+                <div class="no-results">
+                    📭 Термины не найдены. Попробуйте изменить параметры фильтрации.
                 </div>
-                <div class="term-definition">Определение: {{ term.definition }}</div>
-            </div>
-            {% endfor %}
-        </div>
-        
-        <!-- Сообщение о пустом результате -->
-        <div class="no-results" id="noResults" style="display: none;">
-            Термины не найдены
+            {% endif %}
         </div>
     </div>
-
-    <script>
-        // Фильтрация терминов
-        function filterTerms() {
-            const category = document.getElementById('category').value;
-            const search = document.getElementById('search').value;
-            const noResults = document.getElementById('noResults');
-
-            fetch(`/filter?category=${encodeURIComponent(category)}&search=${encodeURIComponent(search)}`)
-                .then(response => response.json())
-                .then(data => {
-                    const container = document.getElementById('termsContainer');
-                    container.innerHTML = '';
-
-                    if (data.terms.length === 0) {
-                        noResults.style.display = 'block';
-                        container.style.display = 'none';
-                        return;
-                    }
-
-                    noResults.style.display = 'none';
-                    container.style.display = 'block';
-
-                    data.terms.forEach(term => {
-                        const termCard = document.createElement('div');
-                        termCard.className = 'term-card';
-                        termCard.innerHTML = `
-                            <div class="term-header">
-                                <span class="term-name">🔹 ${term.term}</span>
-                            </div>
-                            <div class="term-translation">Перевод: ${term.translation}</div>
-                            <div class="term-meta">
-                                Категория: ${term.category} | Уровень: ${term.level}
-                            </div>
-                            <div class="term-definition">Определение: ${term.definition}</div>
-                        `;
-                        container.appendChild(termCard);
-                    });
-                })
-                .catch(error => {
-                    console.error('Ошибка фильтрации:', error);
-                });
-        }
-
-        // Запуск режима обучения
-        function startLearningMode() {
-            const category = document.getElementById('category').value;
-            const search = document.getElementById('search').value;
-            window.location.href = `/learning?category=${encodeURIComponent(category)}&search=${encodeURIComponent(search)}`;
-        }
-
-        // Оптимизация событий с debounce для поиска
-        let searchTimeout;
-        function handleSearch() {
-            clearTimeout(searchTimeout);
-            searchTimeout = setTimeout(filterTerms, 300);
-        }
-
-        // События
-        document.getElementById('category').addEventListener('change', filterTerms);
-        document.getElementById('search').addEventListener('input', handleSearch);
-        
-        // Обработка клавиши Enter в поиске
-        document.getElementById('search').addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') {
-                filterTerms();
-            }
-        });
-    </script>
 </body>
 </html>

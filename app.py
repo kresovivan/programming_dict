@@ -82,6 +82,74 @@ class DictionaryManager:
             if conn:
                 conn.close()
 
+    def _create_database(self):
+        """Создает базу данных и таблицу words с полем alphabet."""
+        print(f"📝 СОЗДАНИЕ НОВОЙ БАЗЫ ДАННЫХ...")
+        conn = self._get_db_connection()
+        if conn is None:
+            print(f"❌ Не удалось создать базу данных")
+            return
+
+        try:
+            cursor = conn.cursor()
+
+            # Создаем таблицу words с полем alphabet
+            cursor.execute('''
+                           CREATE TABLE IF NOT EXISTS words
+                           (
+                               id
+                               INTEGER
+                               PRIMARY
+                               KEY
+                               AUTOINCREMENT,
+                               term
+                               TEXT
+                               NOT
+                               NULL,
+                               definition
+                               TEXT
+                               NOT
+                               NULL,
+                               translation
+                               TEXT,
+                               category
+                               TEXT,
+                               level
+                               TEXT,
+                               alphabet
+                               TEXT -- Добавляем поле для буквы алфавита
+                           )
+                           ''')
+
+            conn.commit()
+            print(f"✅ База данных создана успешно!")
+
+        except sqlite3.Error as e:
+            print(f"❌ Ошибка при создании базы данных: {e}")
+        finally:
+            if conn:
+                conn.close()
+
+    def _create_words_table(self, conn):
+        """Создает таблицу words с полем alphabet."""
+        try:
+            cursor = conn.cursor()
+            cursor.execute('''
+                           CREATE TABLE words
+                           (
+                               id          INTEGER PRIMARY KEY AUTOINCREMENT,
+                               term        TEXT NOT NULL,
+                               definition  TEXT NOT NULL,
+                               translation TEXT,
+                               category    TEXT,
+                               level       TEXT,
+                               alphabet    TEXT -- Добавляем поле для буквы алфавита
+                           )
+                           ''')
+            conn.commit()
+            print(f"✅ Таблица 'words' создана с полем alphabet")
+        except sqlite3.Error as e:
+            print(f"❌ Ошибка при создании таблицы: {e}")
 
     def _run_detailed_diagnostics(self):
         """Запускает детальную диагностику базы данных."""
@@ -150,6 +218,13 @@ class DictionaryManager:
                 for col in columns:
                     print(f"   - {col['name']} ({col['type']})")
 
+                # Проверяем наличие поля alphabet
+                has_alphabet = any(col['name'] == 'alphabet' for col in columns)
+                if has_alphabet:
+                    print(f"✅ Поле 'alphabet' найдено в таблице")
+                else:
+                    print(f"⚠️ Поле 'alphabet' отсутствует в таблице")
+
                 # Проверяем количество записей
                 cursor.execute("SELECT COUNT(*) as count FROM words")
                 count_result = cursor.fetchone()
@@ -169,19 +244,11 @@ class DictionaryManager:
 
                 # Проверяем доступ к конкретным колонкам
                 try:
-                    cursor.execute("SELECT term, definition FROM words LIMIT 1")
+                    cursor.execute("SELECT term, definition, alphabet FROM words LIMIT 1")
                     test_result = cursor.fetchone()
-                    print(f"✅ Доступ к колонкам term,definition: ЕСТЬ")
+                    print(f"✅ Доступ к колонкам term,definition,alphabet: ЕСТЬ")
                 except sqlite3.Error as e:
-                    print(f"❌ Доступ к колонкам term,definition: ОШИБКА - {e}")
-
-                # Проверяем доступ ко всем колонкам которые используем
-                try:
-                    cursor.execute("SELECT term, definition, translation, category, level FROM words LIMIT 1")
-                    test_result = cursor.fetchone()
-                    print(f"✅ Доступ ко всем нужным колонкам: ЕСТЬ")
-                except sqlite3.Error as e:
-                    print(f"❌ Доступ ко всем нужным колонкам: ОШИБКА - {e}")
+                    print(f"❌ Доступ к колонкам term,definition,alphabet: ОШИБКА - {e}")
 
                 # Если есть записи, показываем пример данных
                 if record_count > 0:
@@ -312,7 +379,7 @@ class DictionaryManager:
             cursor = conn.cursor()
             # SQL запрос для получения всех терминов
             print(f"🔍 Выполнение запроса к таблице words...")
-            cursor.execute("SELECT term, definition, translation, category, level FROM words")
+            cursor.execute("SELECT term, definition, translation, category, level, alphabet FROM words")
             rows = cursor.fetchall()
             print(f"🔍 Получено строк: {len(rows)}")
 
@@ -352,7 +419,8 @@ class DictionaryManager:
                 "definition": row['definition'] or "",
                 "translation": row['translation'] or "",
                 "category": row['category'] or "Другое",
-                "level": row['level'] or "Medium"
+                "level": row['level'] or "Medium",
+                "alphabet": row['alphabet'] or ""  # Добавляем поле alphabet
             }
 
             # Пропуск терминов без названия или определения
@@ -393,13 +461,42 @@ class DictionaryManager:
             if conn:
                 conn.close()
 
-    def filter_terms(self, category: str = "Все", search_query: str = "") -> List[Dict]:
+    def get_alphabet_letters(self) -> List[str]:
         """
-        Фильтрация терминов по категории и поисковому запросу.
+        Получение уникального списка букв алфавита из базы данных.
+
+        Returns:
+            List[str]: Список букв в алфавитном порядке
+        """
+        print(f"🔍 Получение списка букв алфавита...")
+        conn = self._get_db_connection()
+        if conn is None:
+            return []
+
+        try:
+            cursor = conn.cursor()
+            # SQL запрос для получения уникальных букв
+            cursor.execute("SELECT DISTINCT alphabet FROM words WHERE alphabet IS NOT NULL ORDER BY alphabet")
+            rows = cursor.fetchall()
+            # Преобразование результатов в список строк
+            letters = [row['alphabet'] for row in rows]
+            print(f"✅ Получено букв: {len(letters)}")
+            return letters
+        except sqlite3.Error as e:
+            print(f"❌ Ошибка при получении букв алфавита: {e}")
+            return []
+        finally:
+            if conn:
+                conn.close()
+
+    def filter_terms(self, category: str = "Все", search_query: str = "", alphabet: str = "Все") -> List[Dict]:
+        """
+        Фильтрация терминов по категории, поисковому запросу и алфавиту.
 
         Args:
             category: Категория для фильтрации ("Все" для всех категорий)
             search_query: Строка для поиска по терминам, переводу и определению
+            alphabet: Буква для фильтрации ("Все" для всех букв)
 
         Returns:
             List[Dict]: Отфильтрованный список терминов
@@ -411,8 +508,8 @@ class DictionaryManager:
         try:
             cursor = conn.cursor()
 
-            # Базовый SQL запрос с условием 1=1 для удобства добавления фильтров
-            query = "SELECT term, definition, translation, category, level FROM words WHERE 1=1"
+            # Базовый SQL запрос
+            query = "SELECT term, definition, translation, category, level, alphabet FROM words WHERE 1=1"
             params = []
 
             # Добавление фильтра по категории если указана
@@ -420,11 +517,16 @@ class DictionaryManager:
                 query += " AND category = ?"
                 params.append(category)
 
+            # Добавление фильтра по алфавиту если указана
+            if alphabet != "Все":
+                query += " AND alphabet = ?"
+                params.append(alphabet)
+
             # Добавление поиска по всем текстовым полям если указан запрос
             if search_query.strip():
                 search_pattern = f"%{search_query}%"
                 query += " AND (term LIKE ? OR translation LIKE ? OR definition LIKE ?)"
-                params.extend([search_pattern] * 3)  # Три одинаковых параметра для трех полей
+                params.extend([search_pattern] * 3)
 
             cursor.execute(query, params)
             rows = cursor.fetchall()
@@ -483,9 +585,15 @@ def index():
     Returns:
         rendered_template: HTML страница с терминами и статистикой
     """
+    # Получение параметров фильтрации из GET запроса
+    category = request.args.get('category', 'Все')
+    alphabet = request.args.get('alphabet', 'Все')
+    search_query = request.args.get('search', '')
+
     # Получение данных для отображения
     categories = dict_manager.get_categories()
-    terms = dict_manager.filter_terms()
+    alphabet_letters = dict_manager.get_alphabet_letters()
+    terms = dict_manager.filter_terms(category, search_query, alphabet)
     progress_total = dict_manager.get_total_terms_count()
     progress_learned = len(dict_manager.learned_terms)
 
@@ -497,27 +605,14 @@ def index():
         'index.html',
         terms=terms,
         categories=categories,
+        alphabet_letters=alphabet_letters,
         progress_total=progress_total,
         progress_learned=progress_learned,
-        progress_percentage=progress_percentage
+        progress_percentage=progress_percentage,
+        selected_category=category,
+        selected_alphabet=alphabet,
+        search_query=search_query
     )
-
-
-@app.route('/filter')
-def filter_terms():
-    """
-    API endpoint для AJAX фильтрации терминов.
-
-    Returns:
-        JSON: Отфильтрованный список терминов
-    """
-    # Получение параметров фильтрации из запроса
-    category = request.args.get('category', 'Все')
-    search_query = request.args.get('search', '')
-
-    # Применение фильтров и возврат JSON ответа
-    filtered_terms = dict_manager.filter_terms(category, search_query)
-    return jsonify({'terms': filtered_terms})
 
 
 @app.route('/learning')
@@ -530,10 +625,11 @@ def learning_mode():
     """
     # Получение параметров фильтрации
     category = request.args.get('category', 'Все')
+    alphabet = request.args.get('alphabet', 'Все')
     search_query = request.args.get('search', '')
 
     # Загрузка отфильтрованных терминов для обучения
-    terms = dict_manager.filter_terms(category, search_query)
+    terms = dict_manager.filter_terms(category, search_query, alphabet)
     return render_template('learning.html', terms=terms)
 
 
@@ -591,43 +687,6 @@ def get_stats():
 
     return jsonify(stats)
 
-
-
-@app.route('/templates/index.html')
-def templates_index():
-    """Обработчик для страницы templates/index.html"""
-    categories = dict_manager.get_categories()
-    terms = dict_manager.filter_terms()
-    progress_total = dict_manager.get_total_terms_count()
-    progress_learned = len(dict_manager.learned_terms)
-    progress_percentage = (progress_learned / progress_total * 100) if progress_total > 0 else 0
-
-    return render_template(
-        'index.html',
-        terms=terms,
-        categories=categories,
-        progress_total=progress_total,
-        progress_learned=progress_learned,
-        progress_percentage=progress_percentage
-    )
-
-@app.route('/')
-def main_index():
-    """Основной обработчик для корневого URL"""
-    categories = dict_manager.get_categories()
-    terms = dict_manager.filter_terms()
-    progress_total = dict_manager.get_total_terms_count()
-    progress_learned = len(dict_manager.learned_terms)
-    progress_percentage = (progress_learned / progress_total * 100) if progress_total > 0 else 0
-
-    return render_template(
-        'index.html',
-        terms=terms,
-        categories=categories,
-        progress_total=progress_total,
-        progress_learned=progress_learned,
-        progress_percentage=progress_percentage
-    )
 
 # Точка входа при запуске скрипта напрямую
 if __name__ == '__main__':

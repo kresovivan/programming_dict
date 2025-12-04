@@ -33,44 +33,25 @@ body {
     margin: 0;
 }
 
-/* Прогресс */
-.progress-container {
+/* Статистика */
+.stats-container {
     padding: 15px;
     background: #f8f9fa;
     border-bottom: 1px solid #e9ecef;
 }
 
-.progress-bar {
-    width: 100%;
-    height: 10px;
-    background: #e9ecef;
-    border-radius: 5px;
-    overflow: hidden;
-    margin-bottom: 8px;
-}
-
-.progress-fill {
-    height: 100%;
-    background: linear-gradient(90deg, #27ae60, #2ecc71);
-    transition: width 0.3s ease;
-}
-
-.progress-text {
+.total-terms {
     text-align: center;
-    font-size: 0.9em;
-    color: #27ae60;
-    font-weight: bold;
+    font-size: 1em;
+    color: #2c3e50;
 }
 
-/* Панель управления */
-
+/* Панель управления (форма) */
 .control-panel {
     padding: 15px;
     background: white;
     border-bottom: 1px solid #e9ecef;
 }
-
-
 
 .filter-group, .search-group {
     margin-bottom: 10px;
@@ -97,17 +78,48 @@ select:focus, input:focus {
     border-color: #3498db;
 }
 
-
-
-select:active {
-    outline: none;
+/* Кнопки формы */
+.form-buttons {
+    display: flex;
+    gap: 10px;
+    margin-top: 15px;
 }
 
+.filter-btn, .clear-btn {
+    flex: 1;
+    padding: 10px;
+    border: none;
+    border-radius: 8px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
 
-/* Кнопки */
+.filter-btn {
+    background: linear-gradient(135deg, #3498db, #2980b9);
+    color: white;
+}
+
+.clear-btn {
+    background: linear-gradient(135deg, #e74c3c, #c0392b);
+    color: white;
+}
+
+.filter-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 3px 10px rgba(52, 152, 219, 0.3);
+}
+
+.clear-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 3px 10px rgba(231, 76, 60, 0.3);
+}
+
+/* Кнопка режима обучения */
 .learning-btn-container {
     padding: 15px;
     text-align: center;
+    border-bottom: 1px solid #e9ecef;
 }
 
 .learning-btn {
@@ -120,6 +132,7 @@ select:active {
     font-weight: bold;
     cursor: pointer;
     transition: transform 0.2s;
+    width: 100%;
 }
 
 .learning-btn:hover {
@@ -150,7 +163,7 @@ select:active {
 .term-header {
     display: flex;
     justify-content: space-between;
-    align-items: flex-start;
+    align-items: center;
     margin-bottom: 8px;
 }
 
@@ -161,16 +174,13 @@ select:active {
     flex: 1;
 }
 
-.learn-btn {
-    background: #27ae60;
+.term-alphabet {
+    background: #3498db;
     color: white;
-    border: none;
-    padding: 5px 10px;
+    padding: 3px 8px;
     border-radius: 5px;
     font-size: 0.8em;
-    cursor: pointer;
-    white-space: nowrap;
-    margin-left: 10px;
+    font-weight: bold;
 }
 
 .term-translation {
@@ -191,116 +201,15 @@ select:active {
     line-height: 1.4;
 }
 
-/* Режим обучения */
-.card-progress {
+/* Сообщение "Термины не найдены" */
+.no-results {
     text-align: center;
-    font-size: 1.2em;
-    font-weight: bold;
-    color: #2c3e50;
-    padding: 15px;
-    background: #f8f9fa;
-}
-
-.learning-card {
-    background: white;
+    padding: 40px 20px;
     margin: 20px;
-    padding: 30px;
+    background: linear-gradient(135deg, rgba(255,255,255,0.95) 0%, rgba(255,255,255,0.9) 100%);
     border-radius: 15px;
-    box-shadow: 0 5px 20px rgba(0,0,0,0.1);
-    min-height: 200px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-}
-
-.card-term {
-    font-size: 1.5em;
-    font-weight: bold;
-    color: #2c3e50;
-    text-align: center;
-    margin-bottom: 20px;
-}
-
-.card-answer {
-    text-align: center;
-}
-
-.card-translation {
-    font-size: 1.2em;
-    color: #2980b9;
-    margin-bottom: 15px;
-}
-
-.card-definition {
-    font-size: 1em;
-    color: #2c3e50;
-    line-height: 1.4;
-}
-
-.card-controls {
-    display: flex;
-    justify-content: space-between;
-    padding: 0 20px 20px;
-    gap: 10px;
-}
-
-.card-btn {
-    flex: 1;
-    padding: 12px;
-    border: none;
-    border-radius: 8px;
-    font-size: 0.9em;
-    font-weight: bold;
-    cursor: pointer;
-    transition: all 0.3s ease;
-}
-
-.prev-btn { background: #e67e22; color: white; }
-.show-btn { background: #3498db; color: white; }
-.next-btn { background: #27ae60; color: white; }
-
-.card-btn:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 3px 10px rgba(0,0,0,0.2);
-}
-
-.exit-container {
-    padding: 0 20px 20px;
-    text-align: center;
-}
-
-.exit-btn {
-    background: #e74c3c;
-    color: white;
-    border: none;
-    padding: 12px 25px;
-    border-radius: 8px;
-    font-size: 1em;
-    cursor: pointer;
-}
-
-/* Адаптивность */
-@media (max-width: 480px) {
-    body {
-        padding: 10px;
-    }
-    
-    .container {
-        border-radius: 15px;
-    }
-    
-    .header h1 {
-        font-size: 1.3em;
-    }
-    
-    .learning-card {
-        margin: 10px;
-        padding: 20px;
-    }
-    
-    .card-term {
-        font-size: 1.3em;
-    }
+    border: 2px dashed #3498db;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
 }
 
 /* Скроллбар */
@@ -322,20 +231,174 @@ select:active {
     background: #95a5a6;
 }
 
-
-/* Красивое сообщение "Термины не найдены" */
-.no-results {
-    display: none;
-    text-align: center;
-    padding: 60px 32px;
-    margin: 20px;
-    background: linear-gradient(135deg, rgba(255,255,255,0.95) 0%, rgba(255,255,255,0.9) 100%);
-    border-radius: var(--border-radius-xl);
-    border: 2px dashed var(--primary-300);
-    box-shadow: var(--shadow-lg);
-    backdrop-filter: blur(10px);
-    position: relative;
-    overflow: hidden;
-    animation: fadeInUp 0.6s ease-out;
+/* Адаптивность */
+@media (max-width: 480px) {
+    body {
+        padding: 10px;
+    }
+    
+    .container {
+        border-radius: 15px;
+    }
+    
+    .header h1 {
+        font-size: 1.3em;
+    }
+    
+    .form-buttons {
+        flex-direction: column;
+    }
 }
 
+
+
+/* Режим обучения - стили для карточек и кнопок */
+.card-progress {
+    text-align: center;
+    font-size: 1.2em;
+    font-weight: bold;
+    color: #2c3e50;
+    padding: 15px;
+    background: #f8f9fa;
+}
+
+.learning-card {
+    background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+    margin: 20px;
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+    min-height: 200px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    border: 2px solid #e9ecef;
+}
+
+.card-term {
+    font-size: 1.5em;
+    font-weight: bold;
+    color: #2c3e50;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.card-answer {
+    text-align: center;
+    animation: fadeIn 0.5s ease-out;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.card-translation {
+    font-size: 1.2em;
+    color: #2980b9;
+    margin-bottom: 15px;
+    font-weight: 600;
+}
+
+.card-definition {
+    font-size: 1em;
+    color: #2c3e50;
+    line-height: 1.4;
+    padding: 10px;
+    background: #f8f9fa;
+    border-radius: 8px;
+    border-left: 3px solid #27ae60;
+}
+
+.card-controls {
+    display: flex;
+    justify-content: space-between;
+    padding: 0 20px 20px;
+    gap: 10px;
+}
+
+.card-btn {
+    flex: 1;
+    padding: 12px;
+    border: none;
+    border-radius: 8px;
+    font-size: 0.9em;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.prev-btn { 
+    background: linear-gradient(135deg, #e67e22, #d35400); 
+    color: white; 
+}
+.show-btn { 
+    background: linear-gradient(135deg, #3498db, #2980b9); 
+    color: white; 
+}
+.next-btn { 
+    background: linear-gradient(135deg, #27ae60, #229954); 
+    color: white; 
+}
+
+.card-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 3px 10px rgba(0,0,0,0.2);
+}
+
+.card-btn:active {
+    transform: translateY(0);
+}
+
+.exit-container {
+    padding: 0 20px 20px;
+    text-align: center;
+}
+
+.exit-btn-link {
+    text-decoration: none;
+    display: block;
+}
+
+.exit-btn {
+    background: linear-gradient(135deg, #e74c3c, #c0392b);
+    color: white;
+    border: none;
+    padding: 12px 25px;
+    border-radius: 8px;
+    font-size: 1em;
+    font-weight: bold;
+    cursor: pointer;
+    width: 100%;
+    transition: all 0.3s ease;
+}
+
+.exit-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 3px 10px rgba(231, 76, 60, 0.3);
+}
+
+.exit-btn:active {
+    transform: translateY(0);
+}
+
+/* Адаптивность для режима обучения */
+@media (max-width: 480px) {
+    .learning-card {
+        margin: 10px;
+        padding: 20px;
+    }
+    
+    .card-term {
+        font-size: 1.3em;
+    }
+    
+    .card-controls {
+        flex-direction: column;
+    }
+    
+    .card-btn {
+        width: 100%;
+        margin-bottom: 5px;
+    }
+}
