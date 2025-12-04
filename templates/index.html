@@ -20,9 +20,11 @@
         <!-- Блок статистики -->
         <div class="stats-container">
             <div class="total-terms">
-                📊 Всего загружено терминов: <strong>{{ progress_total }}</strong>
+                📊 Всего загружено слов: <strong>{{ progress_total }}</strong>
             </div>
         </div>
+
+
 
         <!-- Панель управления - теперь это форма -->
         <form method="GET" action="/" class="control-panel">
@@ -65,7 +67,7 @@
                 <input type="hidden" name="alphabet" value="{{ selected_alphabet }}">
                 <input type="hidden" name="search" value="{{ search_query }}">
                 <button type="submit" class="learning-btn">
-                    📖 Режим обучения
+                    📖 Изучение слов по карточкам
                 </button>
             </form>
         </div>

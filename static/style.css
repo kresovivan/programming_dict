@@ -1,404 +1,726 @@
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+/* Сброс всех отступов и границ для всех элементов */
+* {                             /* Универсальный селектор для всех элементов */
+    margin: 0;                  /* Убирает все внешние отступы */
+    padding: 0;                 /* Убирает все внутренние отступы */
+    box-sizing: border-box;     /* Включает padding и border в ширину/высоту элемента */
 }
 
-body {
-    font-family: 'Arial', sans-serif;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    min-height: 100vh;
-    padding: 20px;
+/* Основные стили для всей страницы */
+body {                          /* Стили для элемента <body> */
+    font-family: 'Arial', sans-serif; /* Устанавливает основной шрифт */
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); /* Градиентный фон страницы */
+    min-height: 100vh;          /* Минимальная высота - 100% высоты окна просмотра */
+    padding: 10px;              /* Отступы вокруг контейнера */
 }
 
-.container {
-    max-width: 400px;
-    margin: 0 auto;
-    background: white;
-    border-radius: 20px;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-    overflow: hidden;
+/* Основной контейнер приложения */
+.container {                    /* Стили для основного контейнера */
+    max-width: 400px;           /* Максимальная ширина контейнера 400px */
+    margin: 0 auto;             /* Центрирование по горизонтали */
+    background: white;          /* Белый фон контейнера */
+    border-radius: 12px;        /* Скругление углов на 12px */
+    box-shadow: 0 6px 20px rgba(0,0,0,0.2); /* Тень контейнера */
+    overflow: hidden;           /* Скрытие содержимого за пределами контейнера */
+    padding-bottom: 20px;       /* Внутренний отступ снизу для кнопок */
 }
 
-/* Заголовок */
-.header {
-    background: linear-gradient(135deg, #27ae60, #2ecc71);
-    color: white;
-    padding: 20px;
-    text-align: center;
+/* ========== ЗАГОЛОВОК ========== */
+.header {                       /* Стили для шапки приложения */
+    background: linear-gradient(135deg, #27ae60, #2ecc71); /* Градиентный фон */
+    color: white;               /* Белый цвет текста */
+    padding: 8px 6px;           /* Внутренние отступы: 8px сверху/снизу, 6px слева/справа */
+    text-align: center;         /* Выравнивание текста по центру */
 }
 
-.header h1 {
-    font-size: 1.5em;
-    margin: 0;
+/* Заголовок "Словарь для начинающих программистов" */
+.header h1 {                    /* Стили для заголовка h1 внутри шапки */
+    font-size: 1.1em;           /* Размер шрифта 1.1em */
+    margin: 0;                  /* Убирает внешние отступы */
+    line-height: 1.1;           /* Высота строки (интерлиньяж) */
+    display: flex;              /* Использует flexbox для расположения элементов */
+    flex-direction: column;     /* Располагает элементы в колонку */
+    align-items: center;        /* Центрирует элементы по горизонтали */
+    gap: 6px;                   /* Расстояние между flex-элементами 6px */
+    white-space: normal;        /* Разрешает перенос текста */
+    text-align: center;         /* Выравнивание текста по центру */
 }
 
-/* Статистика */
-.stats-container {
-    padding: 15px;
-    background: #f8f9fa;
-    border-bottom: 1px solid #e9ecef;
+/* Иконка в заголовке */
+.header-icon {                  /* Стили для иконки в заголовке */
+    width: 24px;                /* Ширина иконки 24px */
+    height: 24px;               /* Высота иконки 24px */
+    margin-bottom: 1px;         /* Отступ снизу 1px */
 }
 
-.total-terms {
-    text-align: center;
-    font-size: 1em;
-    color: #2c3e50;
+/* ========== СТАТИСТИКА ========== */
+.stats-container {              /* Контейнер для статистики */
+    padding: 8px 10px;          /* Внутренние отступы: 8px сверху/снизу, 10px слева/справа */
+    background: #f8f9fa;        /* Светло-серый фон */
+    border-bottom: 1px solid #e9ecef; /* Нижняя граница толщиной 1px */
 }
 
-/* Панель управления (форма) */
-.control-panel {
-    padding: 15px;
-    background: white;
-    border-bottom: 1px solid #e9ecef;
+/* Текст статистики "Всего загружено терминов" */
+.total-terms {                  /* Стили для текста статистики */
+    text-align: center;         /* Центрирование текста */
+    font-size: 0.85em;          /* Размер шрифта 0.85em */
+    color: #2c3e50;             /* Темно-синий цвет текста */
 }
 
-.filter-group, .search-group {
-    margin-bottom: 10px;
+/* ========== ПАНЕЛЬ УПРАВЛЕНИЯ (ФИЛЬТРЫ) ========== */
+.control-panel {                /* Контейнер панели управления */
+    padding: 8px;               /* Внутренние отступы 8px */
+    background: white;          /* Белый фон */
+    border-bottom: 1px solid #e9ecef; /* Нижняя граница толщиной 1px */
 }
 
-label {
-    display: block;
-    margin-bottom: 5px;
-    font-weight: bold;
-    color: #2c3e50;
+.filter-group, .search-group {  /* Стили для групп фильтров и поиска */
+    margin-bottom: 6px;         /* Отступ снизу 6px между группами */
 }
 
-select, input {
-    width: 100%;
-    padding: 10px;
-    border: 2px solid #bdc3c7;
-    border-radius: 10px;
-    font-size: 14px;
-    outline: none;
+/* Метки (лейблы) над выпадающими списками */
+label {                         /* Стили для элементов <label> */
+    display: block;             /* Блочное отображение (занимает всю ширину) */
+    margin-bottom: 3px;         /* Отступ снизу 3px */
+    font-weight: bold;          /* Полужирный шрифт */
+    color: #2c3e50;             /* Темно-синий цвет текста */
+    font-size: 0.8em;           /* Размер шрифта 0.8em */
 }
 
-select:focus, input:focus {
-    outline: none;
-    border-color: #3498db;
+/* Выпадающие списки и поля ввода */
+select, input {                 /* Стили для выпадающих списков и полей ввода */
+    width: 100%;                /* Ширина 100% родительского элемента */
+    padding: 7px 8px;           /* Внутренние отступы: 7px сверху/снизу, 8px слева/справа */
+    border: 2px solid #bdc3c7;  /* Граница толщиной 2px серого цвета */
+    border-radius: 6px;         /* Скругление углов 6px */
+    font-size: 12px;            /* Размер шрифта 12px */
+    outline: none;              /* Убирает outline при фокусе */
+    height: 36px;               /* Высота элементов 36px */
 }
 
-/* Кнопки формы */
-.form-buttons {
-    display: flex;
-    gap: 10px;
-    margin-top: 15px;
+/* Стили при фокусе на полях */
+select:focus, input:focus {     /* Стили при фокусе на элементах */
+    border-color: #3498db;      /* Изменяет цвет границы на синий */
 }
 
-.filter-btn, .clear-btn {
-    flex: 1;
-    padding: 10px;
-    border: none;
-    border-radius: 8px;
-    font-weight: bold;
-    cursor: pointer;
-    transition: all 0.3s ease;
+/* ========== КНОПКИ ФОРМЫ ========== */
+.form-buttons {                 /* Контейнер для кнопок формы */
+    display: flex;              /* Использует flexbox для расположения */
+    gap: 6px;                   /* Расстояние между кнопками 6px */
+    margin-top: 8px;            /* Отступ сверху 8px */
 }
 
-.filter-btn {
-    background: linear-gradient(135deg, #3498db, #2980b9);
-    color: white;
+/* ОБЩИЕ СТИЛИ ДЛЯ ВСЕХ КНОПОК */
+.filter-btn, .clear-btn, .learning-btn { /* Общие стили для кнопок */
+    flex: 1;                    /* Равномерное распределение ширины */
+    padding: 7px;               /* Внутренние отступы 7px */
+    border: none;               /* Убирает границу */
+    border-radius: 5px;         /* Скругление углов 5px */
+    font-weight: bold;          /* Полужирный шрифт */
+    cursor: pointer;            /* Курсор в виде указателя */
+    font-size: 0.8em;           /* Размер шрифта 0.8em */
+    text-align: center;         /* Центрирование текста */
+    white-space: nowrap;        /* Запрещает перенос текста */
 }
 
-.clear-btn {
-    background: linear-gradient(135deg, #e74c3c, #c0392b);
-    color: white;
+/* Кнопка "Применить фильтры" */
+.filter-btn {                   /* Стили для кнопки фильтра */
+    background: linear-gradient(135deg, #3498db, #2980b9); /* Синий градиент */
+    color: white;               /* Белый цвет текста */
 }
 
-.filter-btn:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 3px 10px rgba(52, 152, 219, 0.3);
+/* Кнопка "Очистить" */
+.clear-btn {                    /* Стили для кнопки очистки */
+    background: linear-gradient(135deg, #e74c3c, #c0392b); /* Красный градиент */
+    color: white;               /* Белый цвет текста */
 }
 
-.clear-btn:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 3px 10px rgba(231, 76, 60, 0.3);
+/* ========== КНОПКА РЕЖИМА ОБУЧЕНИЯ ========== */
+.learning-btn-container {       /* Контейнер для кнопки обучения */
+    padding: 8px;               /* Внутренние отступы 8px */
+    text-align: center;         /* Центрирование содержимого */
+    border-bottom: 1px solid #e9ecef; /* Нижняя граница толщиной 1px */
 }
 
-/* Кнопка режима обучения */
-.learning-btn-container {
-    padding: 15px;
-    text-align: center;
-    border-bottom: 1px solid #e9ecef;
+/* Кнопка "Изучение слов по карточкам" */
+.learning-btn {                 /* Стили для кнопки обучения */
+    background: linear-gradient(135deg, #27ae60, #2ecc71); /* Зеленый градиент */
+    color: white;               /* Белый цвет текста */
+    width: 100%;                /* Ширина 100% родительского элемента */
 }
 
-.learning-btn {
-    background: linear-gradient(135deg, #27ae60, #2ecc71);
-    color: white;
-    border: none;
-    padding: 15px 25px;
-    border-radius: 10px;
-    font-size: 1.1em;
-    font-weight: bold;
-    cursor: pointer;
-    transition: transform 0.2s;
-    width: 100%;
+/* ========== КАРТОЧКИ ТЕРМИНОВ ========== */
+.terms-container {              /* Контейнер для списка терминов */
+    max-height: calc(100vh - 250px); /* Максимальная высота с расчетом */
+    min-height: 220px;          /* Минимальная высота 220px */
+    overflow-y: auto;           /* Включает вертикальную прокрутку */
+    padding: 8px;               /* Внутренние отступы 8px */
 }
 
-.learning-btn:hover {
-    transform: translateY(-2px);
+.term-card {                    /* Стили для карточки термина */
+    background: white;          /* Белый фон */
+    border: 2px solid #e9ecef;  /* Граница толщиной 2px */
+    border-radius: 6px;         /* Скругление углов 6px */
+    padding: 9px;               /* Внутренние отступы 9px */
+    margin-bottom: 6px;         /* Отступ снизу между карточками 6px */
 }
 
-/* Карточки терминов */
-.terms-container {
-    max-height: 400px;
-    overflow-y: auto;
-    padding: 10px;
+.term-header {                  /* Заголовок карточки термина */
+    display: flex;              /* Использует flexbox для расположения */
+    justify-content: space-between; /* Распределяет пространство между элементами */
+    align-items: center;        /* Выравнивает элементы по центру по вертикали */
+    margin-bottom: 4px;         /* Отступ снизу 4px */
 }
 
-.term-card {
-    background: white;
-    border: 2px solid #e9ecef;
-    border-radius: 10px;
-    padding: 15px;
-    margin-bottom: 10px;
-    transition: all 0.3s ease;
+/* Название термина */
+.term-name {                    /* Стили для названия термина */
+    font-weight: bold;          /* Полужирный шрифт */
+    font-size: 0.95em;          /* Размер шрифта 0.95em */
+    color: #2c3e50;             /* Темно-синий цвет текста */
+    flex: 1;                    /* Занимает все доступное пространство */
 }
 
-.term-card:hover {
-    border-color: #3498db;
-    box-shadow: 0 5px 15px rgba(52, 152, 219, 0.2);
+/* Буква алфавита в карточке термина */
+.term-alphabet {                /* Стили для буквы алфавита */
+    background: #3498db;        /* Синий фон */
+    color: white;               /* Белый цвет текста */
+    padding: 2px 5px;           /* Внутренние отступы: 2px сверху/снизу, 5px слева/справа */
+    border-radius: 3px;         /* Скругление углов 3px */
+    font-size: 0.7em;           /* Размер шрифта 0.7em */
+    font-weight: bold;          /* Полужирный шрифт */
+    flex-shrink: 0;             /* Запрещает сжатие элемента */
+    margin-left: 4px;           /* Отступ слева 4px */
 }
 
-.term-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 8px;
+/* Перевод термина */
+.term-translation {             /* Стили для перевода термина */
+    color: #2980b9;             /* Синий цвет текста */
+    font-size: 0.8em;           /* Размер шрифта 0.8em */
+    margin-bottom: 2px;         /* Отступ снизу 2px */
 }
 
-.term-name {
-    font-weight: bold;
-    font-size: 1.1em;
-    color: #2c3e50;
-    flex: 1;
+/* Мета-информация (категория и уровень) */
+.term-meta {                    /* Стили для мета-информации */
+    color: #7f8c8d;             /* Серый цвет текста */
+    font-size: 0.7em;           /* Размер шрифта 0.7em */
+    margin-bottom: 4px;         /* Отступ снизу 4px */
 }
 
-.term-alphabet {
-    background: #3498db;
-    color: white;
-    padding: 3px 8px;
-    border-radius: 5px;
-    font-size: 0.8em;
-    font-weight: bold;
+/* Определение термина */
+.term-definition {              /* Стили для определения термина */
+    color: #2c3e50;             /* Темно-синий цвет текста */
+    font-size: 0.75em;          /* Размер шрифта 0.75em */
+    line-height: 1.3;           /* Высота строки 1.3 (интерлиньяж) */
 }
 
-.term-translation {
-    color: #2980b9;
-    font-size: 0.95em;
-    margin-bottom: 5px;
+/* ========== СООБЩЕНИЕ "ТЕРМИНЫ НЕ НАЙДЕНЫ" ========== */
+.no-results {                   /* Стили для сообщения об отсутствии результатов */
+    text-align: center;         /* Центрирование текста */
+    padding: 25px 12px;         /* Внутренние отступы: 25px сверху/снизу, 12px слева/справа */
+    margin: 12px;               /* Внешние отступы 12px */
+    background: white;          /* Белый фон */
+    border-radius: 8px;         /* Скругление углов 8px */
+    border: 2px dashed #3498db; /* Пунктирная граница толщиной 2px синего цвета */
+    font-size: 0.85em;          /* Размер шрифта 0.85em */
 }
 
-.term-meta {
-    color: #7f8c8d;
-    font-size: 0.85em;
-    margin-bottom: 8px;
+/* ========== СТИЛИ СКРОЛЛБАРА ========== */
+.terms-container::-webkit-scrollbar { /* Стили для скроллбара WebKit браузеров */
+    width: 4px;                 /* Ширина скроллбара 4px */
 }
 
-.term-definition {
-    color: #2c3e50;
-    font-size: 0.9em;
-    line-height: 1.4;
+.terms-container::-webkit-scrollbar-track { /* Стили для дорожки скроллбара */
+    background: #f1f1f1;        /* Светло-серый фон */
+    border-radius: 2px;         /* Скругление углов 2px */
 }
 
-/* Сообщение "Термины не найдены" */
-.no-results {
-    text-align: center;
-    padding: 40px 20px;
-    margin: 20px;
-    background: linear-gradient(135deg, rgba(255,255,255,0.95) 0%, rgba(255,255,255,0.9) 100%);
-    border-radius: 15px;
-    border: 2px dashed #3498db;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+.terms-container::-webkit-scrollbar-thumb { /* Стили для ползунка скроллбара */
+    background: #bdc3c7;        /* Серый цвет ползунка */
+    border-radius: 2px;         /* Скругление углов 2px */
 }
 
-/* Скроллбар */
-.terms-container::-webkit-scrollbar {
-    width: 6px;
+.terms-container::-webkit-scrollbar-thumb:hover { /* Стили при наведении на ползунок */
+    background: #95a5a6;        /* Темно-серый цвет при наведении */
 }
 
-.terms-container::-webkit-scrollbar-track {
-    background: #f1f1f1;
-    border-radius: 3px;
-}
+/* ===================== */
+/* МОБИЛЬНЫЕ УСТРОЙСТВА */
+/* ===================== */
 
-.terms-container::-webkit-scrollbar-thumb {
-    background: #bdc3c7;
-    border-radius: 3px;
-}
-
-.terms-container::-webkit-scrollbar-thumb:hover {
-    background: #95a5a6;
-}
-
-/* Адаптивность */
-@media (max-width: 480px) {
-    body {
-        padding: 10px;
+/* Стили для экранов шириной до 480px (смартфоны) */
+@media (max-width: 480px) {     /* Медиа-запрос для экранов до 480px */
+    body {                      /* Изменения для body на мобильных */
+        padding: 6px;           /* Уменьшает отступы до 6px */
     }
     
-    .container {
-        border-radius: 15px;
+    .container {                /* Изменения для контейнера на мобильных */
+        border-radius: 10px;    /* Уменьшает скругление углов до 10px */
+        max-width: 100%;        /* Ширина 100% экрана */
     }
     
-    .header h1 {
-        font-size: 1.3em;
+    /* Заголовок на мобильных */
+    .header {                   /* Изменения для шапки на мобильных */
+        padding: 8px 6px;       /* Отступы шапки */
     }
     
-    .form-buttons {
-        flex-direction: column;
+    .header h1 {                /* Изменения для заголовка на мобильных */
+        font-size: 0.95em;      /* Уменьшает размер шрифта до 0.95em */
+        gap: 4px;               /* Уменьшает расстояние между элементами до 4px */
+    }
+    
+    .header-icon {              /* Изменения для иконки на мобильных */
+        width: 18px;            /* Уменьшает ширину иконки до 18px */
+        height: 18px;           /* Уменьшает высоту иконки до 18px */
+    }
+    
+    /* Статистика на мобильных */
+    .stats-container {          /* Изменения для контейнера статистики */
+        padding: 6px 8px;       /* Уменьшает отступы: 6px сверху/снизу, 8px слева/справа */
+    }
+    
+    .total-terms {              /* Изменения для текста статистики */
+        font-size: 0.8em;       /* Уменьшает размер шрифта до 0.8em */
+    }
+    
+    /* Панель управления на мобильных */
+    .control-panel {            /* Изменения для панели управления */
+        padding: 6px;           /* Уменьшает отступы до 6px */
+        display: flex;          /* Включает flexbox для адаптивности */
+        flex-wrap: wrap;        /* Разрешает перенос элементов */
+        gap: 4px;               /* Расстояние между элементами 4px */
+    }
+    
+    .filter-group {             /* Изменения для групп фильтров */
+        flex: 1 1 calc(50% - 4px); /* Ширина 50% минус отступ */
+        margin-bottom: 0;       /* Убирает отступ снизу */
+    }
+    
+    .search-group {             /* Изменения для группы поиска */
+        flex: 1 1 100%;         /* Ширина 100% */
+        order: 3;               /* Порядок отображения - третий */
+    }
+    
+    label {                     /* Изменения для меток на мобильных */
+        font-size: 0.75em;      /* Уменьшает размер шрифта до 0.75em */
+        margin-bottom: 1px;     /* Уменьшает отступ снизу до 1px */
+    }
+    
+    select, input {             /* Изменения для полей ввода на мобильных */
+        padding: 5px 6px;       /* Уменьшает отступы: 5px сверху/снизу, 6px слева/справа */
+        font-size: 11px;        /* Уменьшает размер шрифта до 11px */
+        height: 32px;           /* Уменьшает высоту до 32px */
+    }
+    
+    /* Кнопки на мобильных */
+    .form-buttons {             /* Изменения для контейнера кнопок */
+        width: 100%;            /* Ширина 100% */
+        order: 4;               /* Порядок отображения - четвертый */
+        margin-top: 6px;        /* Отступ сверху 6px */
+        gap: 4px;               /* Расстояние между кнопками 4px */
+    }
+    
+    .filter-btn, .clear-btn, .learning-btn { /* Изменения для кнопок на мобильных */
+        padding: 6px;           /* Уменьшает отступы до 6px */
+        font-size: 0.75em;      /* Уменьшает размер шрифта до 0.75em */
+    }
+    
+    /* Контейнер кнопки обучения */
+    .learning-btn-container {   /* Изменения для контейнера кнопки обучения */
+        padding: 6px 8px;       /* Уменьшает отступы: 6px сверху/снизу, 8px слева/справа */
+    }
+    
+    .learning-btn {             /* Изменения для кнопки обучения */
+        border-radius: 5px;     /* Скругление углов 5px */
+    }
+    
+    /* Контейнер терминов на мобильных */
+    .terms-container {          /* Изменения для контейнера терминов */
+        max-height: calc(100vh - 220px); /* Новый расчет высоты для мобильных */
+        min-height: 200px;      /* Минимальная высота 200px */
+        padding: 6px;           /* Уменьшает отступы до 6px */
+    }
+    
+    .term-card {                /* Изменения для карточек терминов на мобильных */
+        padding: 8px;           /* Уменьшает отступы до 8px */
+        margin-bottom: 5px;     /* Уменьшает отступ снизу до 5px */
+    }
+    
+    .term-name {                /* Изменения для названий терминов на мобильных */
+        font-size: 0.9em;       /* Уменьшает размер шрифта до 0.9em */
+    }
+    
+    .term-alphabet {            /* Изменения для букв алфавита на мобильных */
+        font-size: 0.65em;      /* Уменьшает размер шрифта до 0.65em */
+        padding: 1px 4px;       /* Уменьшает отступы: 1px сверху/снизу, 4px слева/справа */
+    }
+    
+    .term-translation, .term-meta, .term-definition { /* Изменения для остального текста */
+        font-size: 0.72em;      /* Уменьшает размер шрифта до 0.72em */
     }
 }
 
-
-
-/* Режим обучения - стили для карточек и кнопок */
-.card-progress {
-    text-align: center;
-    font-size: 1.2em;
-    font-weight: bold;
-    color: #2c3e50;
-    padding: 15px;
-    background: #f8f9fa;
+/* Стили для очень высоких экранов (Xiaomi 13T Pro) */
+@media (max-width: 480px) and (min-height: 800px) { /* Медиа-запрос для высоких экранов */
+    .terms-container {          /* Изменения для контейнера терминов */
+        max-height: calc(100vh - 200px); /* Увеличивает максимальную высоту */
+        min-height: 280px;      /* Увеличивает минимальную высоту до 280px */
+    }
+    
+    /* Еще компактнее верх */
+    .header {                   /* Изменения для шапки */
+        padding: 6px 4px;       /* Уменьшает отступы: 6px сверту/снизу, 4px слева/справа */
+    }
+    
+    .header h1 {                /* Изменения для заголовка */
+        font-size: 0.9em;       /* Уменьшает размер шрифта до 0.9em */
+    }
+    
+    .stats-container {          /* Изменения для статистики */
+        padding: 4px 6px;       /* Уменьшает отступы: 4px сверху/снизу, 6px слева/справа */
+    }
+    
+    .control-panel {            /* Изменения для панели управления */
+        padding: 4px;           /* Уменьшает отступы до 4px */
+        gap: 3px;               /* Уменьшает расстояние между элементами до 3px */
+    }
+    
+    .learning-btn-container {   /* Изменения для контейнера кнопки обучения */
+        padding: 4px 6px;       /* Уменьшает отступы: 4px сверту/снизу, 6px слева/справа */
+    }
+    
+    .filter-btn, .clear-btn, .learning-btn { /* Изменения для кнопок */
+        padding: 5px;           /* Уменьшает отступы до 5px */
+        font-size: 0.7em;       /* Уменьшает размер шрифта до 0.7em */
+    }
 }
 
-.learning-card {
-    background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
-    margin: 20px;
-    padding: 30px;
-    border-radius: 15px;
-    box-shadow: 0 5px 20px rgba(0,0,0,0.1);
-    min-height: 200px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    border: 2px solid #e9ecef;
+/* Стили для ландшафтного режима */
+@media (max-width: 900px) and (orientation: landscape) { /* Медиа-запрос для ландшафтного режима */
+    .container {                /* Изменения для контейнера в ландшафтном режиме */
+        max-width: 100%;        /* Ширина 100% */
+        border-radius: 6px;     /* Уменьшает скругление углов до 6px */
+    }
+    
+    .terms-container {          /* Изменения для контейнера терминов */
+        max-height: calc(100vh - 160px); /* Новый расчет высоты для ландшафта */
+    }
+    
+    .control-panel {            /* Изменения для панели управления */
+        display: grid;          /* Использует CSS Grid для расположения */
+        grid-template-columns: repeat(3, 1fr); /* 3 колонки равной ширины */
+        gap: 4px;               /* Расстояние между элементами 4px */
+        padding: 4px;           /* Уменьшает отступы до 4px */
+    }
+    
+    .search-group {             /* Изменения для группы поиска */
+        grid-column: span 3;    /* Занимает все 3 колонки */
+    }
+    
+    .form-buttons {             /* Изменения для контейнера кнопок */
+        grid-column: span 3;    /* Занимает все 3 колонки */
+        margin-top: 4px;        /* Отступ сверху 4px */
+    }
 }
 
-.card-term {
-    font-size: 1.5em;
-    font-weight: bold;
-    color: #2c3e50;
-    text-align: center;
-    margin-bottom: 20px;
+/* ===================== */
+/* РЕЖИМ ОБУЧЕНИЯ */
+/* ===================== */
+
+.card-progress {                /* Стили для прогресса карточек */
+    text-align: center;         /* Центрирование текста */
+    font-size: 1em;             /* Размер шрифта 1em */
+    font-weight: bold;          /* Полужирный шрифт */
+    color: #2c3e50;             /* Темно-синий цвет текста */
+    padding: 10px;              /* Внутренние отступы 10px */
+    background: #f8f9fa;        /* Светло-серый фон */
 }
 
-.card-answer {
-    text-align: center;
-    animation: fadeIn 0.5s ease-out;
+.learning-card {                /* Стили для карточки обучения */
+    background: white;          /* Белый фон */
+    margin: 12px;               /* Внешние отступы 12px */
+    padding: 20px;              /* Внутренние отступы 20px */
+    border-radius: 10px;        /* Скругление углов 10px */
+    box-shadow: 0 3px 12px rgba(0,0,0,0.08); /* Тень карточки */
+    min-height: 160px;          /* Минимальная высота 160px */
+    border: 2px solid #e9ecef;  /* Граница толщиной 2px */
+    display: flex;              /* Использует flexbox */
+    flex-direction: column;     /* Располагает элементы в колонку */
+    justify-content: flex-start; /* Выравнивает элементы к началу */
 }
 
-@keyframes fadeIn {
-    from { opacity: 0; transform: translateY(10px); }
-    to { opacity: 1; transform: translateY(0); }
+/* Заголовок карточки с буквой алфавита */
+.card-term-header {             /* Заголовок карточки с термином */
+    display: flex;              /* Использует flexbox */
+    justify-content: center;    /* Центрирует по горизонтали */
+    align-items: center;        /* Центрирует по вертикали */
+    gap: 8px;                   /* Расстояние между элементами 8px */
+    margin-bottom: 12px;        /* Отступ снизу 12px */
+    flex-wrap: wrap;            /* Разрешает перенос элементов */
 }
 
-.card-translation {
-    font-size: 1.2em;
-    color: #2980b9;
-    margin-bottom: 15px;
-    font-weight: 600;
+.card-term {                    /* Стили для термина */
+    font-size: 1.3em;           /* Размер шрифта 1.3em */
+    font-weight: bold;          /* Полужирный шрифт */
+    color: #2c3e50;             /* Темно-синий цвет текста */
+    text-align: center;         /* Центрирование текста */
 }
 
-.card-definition {
-    font-size: 1em;
-    color: #2c3e50;
-    line-height: 1.4;
-    padding: 10px;
-    background: #f8f9fa;
-    border-radius: 8px;
-    border-left: 3px solid #27ae60;
+/* Буква алфавита в режиме обучения */
+.card-alphabet {                /* Стили для буквы алфавита */
+    background: linear-gradient(135deg, #3498db, #2980b9); /* Синий градиент */
+    color: white;               /* Белый цвет текста */
+    padding: 4px 8px;           /* Внутренние отступы: 4px сверху/снизу, 8px слева/справа */
+    border-radius: 5px;         /* Скругление углов 5px */
+    font-size: 0.85em;          /* Размер шрифта 0.85em */
+    font-weight: bold;          /* Полужирный шрифт */
+    min-width: 24px;            /* Минимальная ширина 24px */
+    text-align: center;         /* Центрирование текста */
+    box-shadow: 0 2px 4px rgba(52, 152, 219, 0.2); /* Тень буквы */
 }
 
-.card-controls {
-    display: flex;
-    justify-content: space-between;
-    padding: 0 20px 20px;
-    gap: 10px;
+.card-answer {                  /* Контейнер для ответа */
+    text-align: center;         /* Центрирование содержимого */
 }
 
-.card-btn {
-    flex: 1;
-    padding: 12px;
-    border: none;
-    border-radius: 8px;
-    font-size: 0.9em;
-    font-weight: bold;
-    cursor: pointer;
-    transition: all 0.3s ease;
+.card-translation {             /* Стили для перевода */
+    font-size: 1em;             /* Размер шрифта 1em */
+    color: #2980b9;             /* Синий цвет текста */
+    margin-bottom: 10px;        /* Отступ снизу 10px */
+    font-weight: 600;           /* Насыщенность шрифта 600 (полужирный) */
 }
 
-.prev-btn { 
-    background: linear-gradient(135deg, #e67e22, #d35400); 
-    color: white; 
-}
-.show-btn { 
-    background: linear-gradient(135deg, #3498db, #2980b9); 
-    color: white; 
-}
-.next-btn { 
-    background: linear-gradient(135deg, #27ae60, #229954); 
-    color: white; 
+.card-definition {              /* Стили для определения */
+    font-size: 0.9em;           /* Размер шрифта 0.9em */
+    color: #2c3e50;             /* Темно-синий цвет текста */
+    line-height: 1.3;           /* Высота строки 1.3 */
+    padding: 10px;              /* Внутренние отступы 10px */
+    background: #f8f9fa;        /* Светло-серый фон */
+    border-radius: 6px;         /* Скругление углов 6px */
+    border-left: 3px solid #27ae60; /* Левая граница толщиной 3px зеленого цвета */
 }
 
-.card-btn:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 3px 10px rgba(0,0,0,0.2);
+/* КОНТЕЙНЕР КНОПОК УПРАВЛЕНИЯ - ИЗМЕНЕНИЯ ЗДЕСЬ */
+.card-controls {                /* Контейнер для кнопок управления */
+    display: flex;              /* Использует flexbox */
+    justify-content: space-between; /* Распределяет пространство между кнопками */
+    padding: 0 12px;            /* Внутренние отступы: 0 сверху/снизу, 12px слева/справа */
+    gap: 9px;                   /* Расстояние между кнопками 9px (полуторный интервал) */
+    margin-bottom: 12px;        /* Отступ снизу 12px (двойной интервал) */
 }
 
-.card-btn:active {
-    transform: translateY(0);
+/* Общие стили кнопок в обучении */
+.card-btn {                     /* Общие стили для кнопок карточки */
+    flex: 1;                    /* Равномерное распределение ширины */
+    padding: 9px;               /* Внутренние отступы 9px */
+    border: none;               /* Убирает границу */
+    border-radius: 6px;         /* Скругление углов 6px */
+    font-size: 0.8em;           /* Размер шрифта 0.8em */
+    font-weight: bold;          /* Полужирный шрифт */
+    cursor: pointer;            /* Курсор в виде указателя */
 }
 
-.exit-container {
-    padding: 0 20px 20px;
-    text-align: center;
+/* Кнопка "Назад" */
+.prev-btn {                     /* Стили для кнопки "Назад" */
+    background: linear-gradient(135deg, #e67e22, #d35400); /* Оранжевый градиент */
+    color: white;               /* Белый цвет текста */
 }
 
-.exit-btn-link {
-    text-decoration: none;
-    display: block;
+/* Кнопка "Показать ответ" */
+.show-btn {                     /* Стили для кнопки "Показать ответ" */
+    background: linear-gradient(135deg, #3498db, #2980b9); /* Синий градиент */
+    color: white;               /* Белый цвет текста */
 }
 
-.exit-btn {
-    background: linear-gradient(135deg, #e74c3c, #c0392b);
-    color: white;
-    border: none;
-    padding: 12px 25px;
-    border-radius: 8px;
-    font-size: 1em;
-    font-weight: bold;
-    cursor: pointer;
-    width: 100%;
-    transition: all 0.3s ease;
+/* Кнопка "Вперед" */
+.next-btn {                     /* Стили для кнопки "Вперед" */
+    background: linear-gradient(135deg, #27ae60, #229954); /* Зеленый градиент */
+    color: white;               /* Белый цвет текста */
 }
 
-.exit-btn:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 3px 10px rgba(231, 76, 60, 0.3);
+.card-btn:hover {               /* Стили при наведении на кнопки */
+    transform: translateY(-1px); /* Сдвигает кнопку на 1px вверх */
 }
 
-.exit-btn:active {
-    transform: translateY(0);
+.card-btn:active {              /* Стили при нажатии на кнопки */
+    transform: translateY(0);    /* Возвращает кнопку в исходное положение */
+}
+
+/* КОНТЕЙНЕР КНОПКИ ВЫХОДА - ИЗМЕНЕНИЯ ЗДЕСЬ */
+.exit-container {               /* Контейнер для кнопки выхода */
+    padding: 0 12px;            /* Внутренние отступы: 0 сверху/снизу, 12px слева/справа */
+    text-align: center;         /* Центрирование содержимого */
+    margin-top: 12px;           /* Отступ сверху 12px (двойной интервал) */
+}
+
+.exit-btn-link {                /* Стили для ссылки-обертки кнопки выхода */
+    text-decoration: none;      /* Убирает подчеркивание */
+    display: block;             /* Блочное отображение */
+}
+
+/* Кнопка "Назад к словарю" в обучении */
+.exit-btn {                     /* Стили для кнопки выхода */
+    background: linear-gradient(135deg, #e74c3c, #c0392b); /* Красный градиент */
+    color: white;               /* Белый цвет текста */
+    border: none;               /* Убирает границу */
+    padding: 9px 16px;          /* Внутренние отступы: 9px сверху/снизу, 16px слева/справа */
+    border-radius: 6px;         /* Скругление углов 6px */
+    font-size: 0.9em;           /* Размер шрифта 0.9em */
+    font-weight: bold;          /* Полужирный шрифт */
+    cursor: pointer;            /* Курсор в виде указателя */
+    width: 100%;                /* Ширина 100% */
+}
+
+.exit-btn:hover {               /* Стили при наведении на кнопку выхода */
+    transform: translateY(-1px); /* Сдвигает кнопку на 1px вверх */
+}
+
+.exit-btn:active {              /* Стили при нажатии на кнопку выхода */
+    transform: translateY(0);    /* Возвращает кнопку в исходное положение */
 }
 
 /* Адаптивность для режима обучения */
-@media (max-width: 480px) {
-    .learning-card {
-        margin: 10px;
-        padding: 20px;
+@media (max-width: 480px) {     /* Медиа-запрос для мобильных в режиме обучения */
+    .learning-card {            /* Изменения для карточки обучения */
+        margin: 8px;            /* Уменьшает отступы до 8px */
+        padding: 16px;          /* Уменьшает внутренние отступы до 16px */
+        min-height: 140px;      /* Уменьшает минимальную высоту до 140px */
     }
     
-    .card-term {
-        font-size: 1.3em;
+    .card-term-header {         /* Изменения для заголовка карточки */
+        gap: 6px;               /* Уменьшает расстояние между элементами до 6px */
+        margin-bottom: 10px;    /* Уменьшает отступ снизу до 10px */
     }
     
-    .card-controls {
-        flex-direction: column;
+    .card-term {                /* Изменения для термина */
+        font-size: 1.1em;       /* Уменьшает размер шрифта до 1.1em */
     }
     
-    .card-btn {
-        width: 100%;
-        margin-bottom: 5px;
+    .card-alphabet {            /* Изменения для буквы алфавита */
+        padding: 3px 6px;       /* Уменьшает отступы: 3px сверху/снизу, 6px слева/справа */
+        font-size: 0.75em;      /* Уменьшает размер шрифта до 0.75em */
+        min-width: 20px;        /* Уменьшает минимальную ширину до 20px */
+    }
+    
+    .card-translation {         /* Изменения для перевода */
+        font-size: 0.9em;       /* Уменьшает размер шрифта до 0.9em */
+    }
+    
+    .card-definition {          /* Изменения для определения */
+        font-size: 0.85em;      /* Уменьшает размер шрифта до 0.85em */
+        padding: 8px;           /* Уменьшает отступы до 8px */
+    }
+    
+    /* ИЗМЕНЕНИЕ: КНОПКИ В СТРОКУ НА МОБИЛЬНЫХ (КАК В ДЕСКТОПЕ) */
+    .card-controls {            /* Изменения для контейнера кнопок */
+        padding: 0 8px;         /* Уменьшает горизонтальные отступы до 8px */
+        flex-direction: row;    /* Кнопки в строку (не в колонку) */
+        gap: 6px;               /* Расстояние между кнопками 6px */
+        margin-bottom: 12px;    /* Отступ снизу 12px */
+    }
+    
+    .card-btn {                 /* Изменения для кнопок */
+        width: auto;            /* Автоматическая ширина (не 100%) */
+        margin-bottom: 0;       /* Убирает отступ снизу */
+        padding: 8px;           /* Уменьшает отступы до 8px */
+        font-size: 0.75em;      /* Уменьшает размер шрифта до 0.75em */
+    }
+    
+    .exit-btn {                 /* Изменения для кнопки выхода */
+        padding: 8px 14px;      /* Уменьшает отступы: 8px сверху/снизу, 14px слева/справа */
+        font-size: 0.8em;       /* Уменьшает размер шрифта до 0.8em */
+    }
+    
+    .exit-container {           /* Изменения для контейнера кнопки выхода */
+        padding: 0 8px;         /* Уменьшает горизонтальные отступы до 8px */
+        margin-top: 12px;       /* Отступ сверху 12px */
+    }
+    
+    .card-progress {            /* Изменения для прогресса */
+        padding: 8px;           /* Уменьшает отступы до 8px */
+        font-size: 0.9em;       /* Уменьшает размер шрифта до 0.9em */
+    }
+}
+
+/* Для очень маленьких экранов в режиме обучения */
+@media (max-width: 360px) {     /* Медиа-запрос для экранов до 360px */
+    .learning-card {            /* Изменения для карточки обучения */
+        margin: 6px;            /* Уменьшает отступы до 6px */
+        padding: 14px;          /* Уменьшает внутренние отступы до 14px */
+        min-height: 120px;      /* Уменьшает минимальную высоту до 120px */
+    }
+    
+    .card-term {                /* Изменения для термина */
+        font-size: 1em;         /* Уменьшает размер шрифта до 1em */
+    }
+    
+    .card-alphabet {            /* Изменения для буквы алфавита */
+        padding: 2px 5px;       /* Уменьшает отступы: 2px сверху/снизу, 5px слева/справа */
+        font-size: 0.7em;       /* Уменьшает размер шрифта до 0.7em */
+        min-width: 18px;        /* Уменьшает минимальную ширину до 18px */
+    }
+    
+    .card-progress {            /* Изменения для прогресса */
+        padding: 6px;           /* Уменьшает отступы до 6px */
+        font-size: 0.85em;      /* Уменьшает размер шрифта до 0.85em */
+    }
+    
+    .card-controls {            /* Изменения для контейнера кнопок */
+        gap: 5px;               /* Уменьшает расстояние между кнопками до 5px */
+        margin-bottom: 10px;    /* Уменьшает отступ снизу до 10px */
+    }
+    
+    .card-btn {                 /* Изменения для кнопок */
+        padding: 7px;           /* Уменьшает отступы до 7px */
+        font-size: 0.7em;       /* Уменьшает размер шрифта до 0.7em */
+    }
+    
+    .exit-btn {                 /* Изменения для кнопки выхода */
+        padding: 7px 12px;      /* Уменьшает отступы: 7px сверху/снизу, 12px слева/справа */
+        font-size: 0.75em;      /* Уменьшает размер шрифта до 0.75em */
+    }
+    
+    .exit-container {           /* Изменения для контейнера кнопки выхода */
+        margin-top: 10px;       /* Уменьшает отступ сверху до 10px */
+    }
+}
+
+/* Для экстремально маленьких экранов в режиме обучения */
+@media (max-width: 320px) {     /* Медиа-запрос для экранов до 320px */
+    .learning-card {            /* Изменения для карточки обучения */
+        margin: 4px;            /* Уменьшает отступы до 4px */
+        padding: 12px;          /* Уменьшает внутренние отступы до 12px */
+        min-height: 100px;      /* Уменьшает минимальную высоту до 100px */
+    }
+    
+    .card-term {                /* Изменения для термина */
+        font-size: 0.95em;      /* Уменьшает размер шрифта до 0.95em */
+    }
+    
+    .card-alphabet {            /* Изменения для буквы алфавита */
+        padding: 2px 4px;       /* Уменьшает отступы: 2px сверху/снизу, 4px слева/справа */
+        font-size: 0.65em;      /* Уменьшает размер шрифта до 0.65em */
+        min-width: 16px;        /* Уменьшает минимальную ширину до 16px */
+    }
+    
+    .card-translation {         /* Изменения для перевода */
+        font-size: 0.85em;      /* Уменьшает размер шрифта до 0.85em */
+    }
+    
+    .card-definition {          /* Изменения для определения */
+        font-size: 0.8em;       /* Уменьшает размер шрифта до 0.8em */
+        padding: 6px;           /* Уменьшает отступы до 6px */
+    }
+    
+    .card-controls {            /* Изменения для контейнера кнопок */
+        gap: 4px;               /* Уменьшает расстояние между кнопками до 4px */
+        margin-bottom: 8px;     /* Уменьшает отступ снизу до 8px */
+    }
+    
+    .card-btn {                 /* Изменения для кнопок */
+        padding: 6px;           /* Уменьшает отступы до 6px */
+        font-size: 0.65em;      /* Уменьшает размер шрифта до 0.65em */
+    }
+    
+    .exit-container {           /* Изменения для контейнера кнопки выхода */
+        margin-top: 8px;        /* Уменьшает отступ сверху до 8px */
     }
 }

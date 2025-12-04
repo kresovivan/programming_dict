@@ -3,14 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>📖 Режим обучения</title>
+    <title>📖 Изучение слов по карточкам</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
     <div class="container">
         <!-- Заголовок -->
         <header class="header">
-            <h1>📖 Режим обучения</h1>
+            <h1>📖 Изучение слов по карточкам</h1>
         </header>
 
         <!-- Прогресс карточек -->
@@ -20,8 +20,15 @@
 
         <!-- Карточка -->
         <div class="learning-card" id="learningCard">
-            <div class="card-term" id="cardTerm">
-                {{ terms[0].term if terms else 'Нет терминов' }}
+            <div class="card-term-header">
+                <div class="card-term" id="cardTerm">
+                    {{ terms[0].term if terms else 'Нет терминов' }}
+                </div>
+                {% if terms and terms[0].alphabet %}
+                <div class="card-alphabet">
+                    {{ terms[0].alphabet }}
+                </div>
+                {% endif %}
             </div>
             
             <div class="card-answer" id="cardAnswer" style="display: none;">
@@ -74,6 +81,15 @@
             document.getElementById('cardTranslation').textContent = `Перевод: ${term.translation}`;
             document.getElementById('cardDefinition').textContent = `Определение: ${term.definition}`;
             document.getElementById('cardProgress').textContent = `${currentIndex + 1}/${terms.length}`;
+            
+            // Обновляем букву алфавита (если есть элемент)
+            const alphabetElement = document.querySelector('.card-alphabet');
+            if (alphabetElement && term.alphabet) {
+                alphabetElement.textContent = term.alphabet;
+                alphabetElement.style.display = 'block';
+            } else if (alphabetElement && !term.alphabet) {
+                alphabetElement.style.display = 'none';
+            }
             
             // Скрыть ответ
             document.getElementById('cardAnswer').style.display = 'none';
